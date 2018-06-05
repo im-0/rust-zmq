@@ -17,6 +17,7 @@ fn create_socketpair() -> (Socket, Socket) {
     // Don't block forever
     sender.set_sndtimeo(1000).unwrap();
     sender.set_rcvtimeo(1000).unwrap();
+    sender.set_connect_timeout(1000).unwrap();
     receiver.set_sndtimeo(1000).unwrap();
     receiver.set_rcvtimeo(1000).unwrap();
 
@@ -548,6 +549,13 @@ test!(test_getset_handshake_ivl, {
     let sock = ctx.socket(REQ).unwrap();
     sock.set_handshake_ivl(50000).unwrap();
     assert_eq!(sock.get_handshake_ivl().unwrap(), 50000);
+});
+
+test!(test_getset_connect_timeout, {
+    let ctx = Context::new();
+    let sock = ctx.socket(REQ).unwrap();
+    sock.set_connect_timeout(5000).unwrap();
+    assert_eq!(sock.get_connect_timeout().unwrap(), 5000);
 });
 
 #[cfg(feature = "compiletest_rs")]
